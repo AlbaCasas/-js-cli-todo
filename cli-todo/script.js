@@ -10,7 +10,13 @@ async function createTask() {
   });
   const task = { description };
   tasks = [...tasks, task];
-  console.log(tasks);
+}
+
+async function solveTask() {
+  if (tasks.length === 0) {
+    console.log("there is nothing to solve");
+    return;
+  }
 }
 
 async function main() {
@@ -19,7 +25,7 @@ async function main() {
     const { selectItems } = await prompt({
       type: "select",
       name: "selectItems",
-      choices: ["create task", "filter tasks", "solve task ", "exit"],
+      choices: ["create task", "filter tasks", "solve task", "exit"],
       message: "Choose an option",
     });
     switch (selectItems) {
@@ -29,6 +35,9 @@ async function main() {
         break;
       case "create task":
         await createTask();
+        continue;
+      case "solve task":
+        await solveTask();
         break;
     }
   }
