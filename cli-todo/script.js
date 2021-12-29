@@ -49,6 +49,14 @@ async function solveTask() {
   console.log(`${chosenTask.description} task marked as solved`);
 }
 
+async function filterTask() {
+  const { search } = await prompt({
+    name: "search",
+    type: "input",
+    message: "Search by:",
+  });
+}
+
 async function main() {
   let loop = true;
   while (loop) {
@@ -70,6 +78,7 @@ async function main() {
         await solveTask();
         continue;
       case "filter tasks":
+        await filterTask();
         break;
     }
   }
