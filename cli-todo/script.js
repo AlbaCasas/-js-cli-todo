@@ -3,12 +3,13 @@ const { prompt } = require("enquirer");
 let tasks = [];
 
 async function createTask() {
+  const uuid = Math.random().toString(36).slice(-6);
   const { description } = await prompt({
     name: "description",
     type: "input",
     message: "Description of your task",
   });
-  const task = { description };
+  const task = { description, uuid };
   tasks = [...tasks, task];
 }
 
