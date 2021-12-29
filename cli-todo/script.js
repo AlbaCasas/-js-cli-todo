@@ -2,6 +2,22 @@ const { prompt } = require("enquirer");
 
 let tasks = [];
 
+/**
+ * tasks = [
+ * {
+ *  description: "hacer la compra",
+ *  solved: false,
+ *  uuid: 2sadsa
+ * },
+ * {
+ *  description: "entrenar",
+ *  uuid: 2asdsad,
+ *  solved: true
+ * }
+ * ]
+ *
+ */
+
 async function createTask() {
   const uuid = Math.random().toString(36).slice(-6);
   const { description } = await prompt({
@@ -9,7 +25,7 @@ async function createTask() {
     type: "input",
     message: "Description of your task",
   });
-  const task = { description, uuid };
+  const task = { description, uuid, solved: false };
   tasks = [...tasks, task];
   console.log(`Task ${description} created!`);
 }
@@ -20,20 +36,10 @@ async function solveTask() {
     return;
   }
   tasks.forEach((task) => {
-    console.log(`${task.uuid} - ${task.description}`);
+    if (task.solved === false) {
+      console.log(`${task.uuid} - ${task.description}`);
+    }
   });
-  const { uuidChosen } = await prompt({
-    type: "input",
-    name: "uuidChosen",
-    message: "Enter a uuid to solve",
-  });
-  const taskToSolve = tasks.find((task) => {
-    return task.uuid === uuidChosen;
-  });
-  tasks = tasks.filter((task) => {
-    return task.uuid !== taskToSolve.uuid;
-  });
-  console.log(`${taskToSolve.description} task marked as solved!`);
 }
 
 async function main() {
@@ -55,6 +61,8 @@ async function main() {
         continue;
       case "solve task":
         await solveTask();
+        continue;
+      case "filter tasks":
         break;
     }
   }
