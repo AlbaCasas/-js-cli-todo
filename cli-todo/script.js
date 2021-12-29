@@ -55,6 +55,20 @@ async function filterTask() {
     type: "input",
     message: "Search by:",
   });
+  const filteredTasks = tasks.filter((task) => {
+    return task.description.startsWith(search);
+  });
+  if (filteredTasks.length === 0) {
+    console.log("Did not find any task :(");
+    return;
+  }
+  filteredTasks.forEach((task) => {
+    if (task.solved === true) {
+      console.log(`${task.description} (solved)`);
+    } else {
+      console.log(`${task.description}`);
+    }
+  });
 }
 
 async function main() {
