@@ -40,6 +40,12 @@ async function solveTask() {
       console.log(`${task.uuid} - ${task.description}`);
     }
   });
+  const { taskToSolve } = await prompt({
+    name: "taskToSolve",
+    type: "input",
+    message: "Type uuid of task to solve:",
+  });
+  console.log(taskToSolve);
 }
 
 async function main() {
