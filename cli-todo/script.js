@@ -3,11 +3,14 @@ const { prompt } = require("enquirer");
 let tasks = [];
 
 async function createTask() {
-  const { createTask } = await prompt({
-    name: "createTask",
+  const { description } = await prompt({
+    name: "description",
     type: "input",
     message: "Description of your task",
   });
+  const task = { description };
+  tasks = [...tasks, task];
+  console.log(tasks);
 }
 
 async function main() {
