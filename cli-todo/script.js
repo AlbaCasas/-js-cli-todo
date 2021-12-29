@@ -11,6 +11,7 @@ async function createTask() {
   });
   const task = { description, uuid };
   tasks = [...tasks, task];
+  console.log(`Task ${description} created!`);
 }
 
 async function solveTask() {
@@ -18,6 +19,21 @@ async function solveTask() {
     console.log("there is nothing to solve");
     return;
   }
+  tasks.forEach((task) => {
+    console.log(`${task.uuid} - ${task.description}`);
+  });
+  const { uuidChosen } = await prompt({
+    type: "input",
+    name: "uuidChosen",
+    message: "Enter a uuid to solve",
+  });
+  const taskToSolve = tasks.find((task) => {
+    return task.uuid === uuidChosen;
+  });
+  tasks = tasks.filter((task) => {
+    return task.uuid !== taskToSolve.uuid;
+  });
+  console.log(`${taskToSolve.description} task marked as solved!`);
 }
 
 async function main() {
