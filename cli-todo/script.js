@@ -2,22 +2,6 @@ const { prompt } = require("enquirer");
 
 let tasks = [];
 
-/**
- * tasks = [
- * {
- *  description: "hacer la compra",
- *  solved: false,
- *  uuid: 2sadsa
- * },
- * {
- *  description: "entrenar",
- *  uuid: 2asdsad,
- *  solved: true
- * }
- * ]
- *
- */
-
 async function createTask() {
   const uuid = Math.random().toString(36).slice(-6);
   const { description } = await prompt({
@@ -31,21 +15,38 @@ async function createTask() {
 }
 
 async function solveTask() {
-  if (tasks.length === 0) {
+  const unsolved = tasks.filter((task) => {
+    return task.solved === false;
+  });
+  if (unsolved.length === 0) {
     console.log("there is nothing to solve");
     return;
   }
-  tasks.forEach((task) => {
-    if (task.solved === false) {
-      console.log(`${task.uuid} - ${task.description}`);
-    }
+  unsolved.forEach((task) => {
+    console.log(`${task.uuid} - ${task.description}`);
   });
   const { taskToSolve } = await prompt({
     name: "taskToSolve",
     type: "input",
     message: "Type uuid of task to solve:",
   });
-  console.log(taskToSolve);
+  tasks = tasks.map((task) => {
+    if (taskToSolve === task.uuid) {
+      return {
+        ...task,
+        solved: true,
+      };
+    }
+    return task;
+  });
+  const chosenTask = tasks.find((task) => {
+    return task.uuid === taskToSolve;
+  });
+  if (chosenTask === undefined) {
+    console.log("Please, you must select a valid uuid");
+    return;
+  }
+  console.log(`${chosenTask.description} task marked as solved`);
 }
 
 async function main() {
