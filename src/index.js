@@ -1,23 +1,24 @@
 const { prompt } = require("enquirer");
-
-let tasks = [];
+const {
+  addTask,
+  getTaskById,
+  getTasksByDescription,
+  getTasksBySolved,
+  updateTaskById,
+} = require("./api");
 
 async function createTask() {
-  const uuid = Math.random().toString(36).slice(-6);
   const { description } = await prompt({
     name: "description",
     type: "input",
     message: "Description of your task",
   });
-  const task = { description, uuid, solved: false };
-  tasks = [...tasks, task];
+  addTask({ description });
   console.log(`Task ${description} created!`);
 }
 
 async function solveTask() {
-  const unsolved = tasks.filter((task) => {
-    return task.solved === false;
-  });
+  const unsolved = getTasksBySolved(false);
   if (unsolved.length === 0) {
     console.log("there is nothing to solve");
     return;
@@ -30,22 +31,12 @@ async function solveTask() {
     type: "input",
     message: "Type uuid of task to solve:",
   });
-  tasks = tasks.map((task) => {
-    if (taskToSolve === task.uuid) {
-      return {
-        ...task,
-        solved: true,
-      };
-    }
-    return task;
-  });
-  const chosenTask = tasks.find((task) => {
-    return task.uuid === taskToSolve;
-  });
+  const chosenTask = getTaskById(taskToSolve);
   if (chosenTask === undefined) {
     console.log("Please, you must select a valid uuid");
     return;
   }
+  updateTaskById(taskToSolve, { solved: true });
   console.log(`${chosenTask.description} task marked as solved`);
 }
 
@@ -55,9 +46,7 @@ async function filterTask() {
     type: "input",
     message: "Search by:",
   });
-  const filteredTasks = tasks.filter((task) => {
-    return task.description.startsWith(search);
-  });
+  const filteredTasks = getTasksByDescription(search);
   if (filteredTasks.length === 0) {
     console.log("Did not find any task :(");
     return;

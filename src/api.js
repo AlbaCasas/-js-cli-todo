@@ -1,6 +1,10 @@
 let tasks = [];
 function addTask(task) {
-  tasks.push({ ...task, uuid: Math.random().toString(36).slice(-6) });
+  tasks.push({
+    ...task,
+    solved: false,
+    uuid: Math.random().toString(36).slice(-6),
+  });
 }
 
 function getTaskById(id) {
@@ -15,7 +19,7 @@ function getTasksBySolved(solved) {
   return tasks.filter((task) => task.solved === solved);
 }
 
-function updateById(uuid, data) {
+function updateTaskById(uuid, data) {
   tasks = tasks.map((task) => {
     if (task.uuid === uuid) {
       return { ...task, ...data };
@@ -23,3 +27,11 @@ function updateById(uuid, data) {
     return task;
   });
 }
+
+module.exports = {
+  addTask,
+  getTaskById,
+  getTasksByDescription,
+  getTasksBySolved,
+  updateTaskById,
+};
