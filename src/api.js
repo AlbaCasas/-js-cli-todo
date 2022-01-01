@@ -3,21 +3,23 @@ function addTask(task) {
   tasks.push({ ...task, uuid: Math.random().toString(36).slice(-6) });
 }
 
-function getTasksById(id) {}
+function getTaskById(id) {
+  return tasks.find((task) => task.uuid === id);
+}
 
-function getTasksByDescription(description) {}
+function getTasksByDescription(description) {
+  return tasks.filter((task) => task.description.startsWith(description));
+}
 
-function getTasksBySolved(description) {}
+function getTasksBySolved(solved) {
+  return tasks.filter((task) => task.solved === solved);
+}
 
-function updateById(uuid, data) {}
-
-addTask({
-  description: "Hola",
-  solved: false,
-});
-addTask({
-  description: "Hola",
-  solved: false,
-});
-
-console.log(tasks);
+function updateById(uuid, data) {
+  tasks = tasks.map((task) => {
+    if (task.uuid === uuid) {
+      return { ...task, ...data };
+    }
+    return task;
+  });
+}
